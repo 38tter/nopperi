@@ -1,0 +1,41 @@
+{
+    "manifest_version": 2,
+    "name": "NOPPERI",
+    "version": "0.0.4",
+    "description": "notion のページを一枚にまとめて出力します",
+    "short_name": "NOPP",
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.notion.so/*"
+            ],
+            "js": [
+                "src/content.js"
+            ],
+            "all_frames": true,
+            "run_at": "document_end"
+        }
+    ],
+    "icons": {
+        "16": "dummy.jpg",
+        "48": "dummy.jpg",
+        "128": "dummy.jpg"
+    },
+    "browser_action": {
+        "default_icon": {
+            "19": "dummy.jpg"
+        },
+        "default_title": "nopperi"
+    },
+    "background": {
+        "scripts": [
+            "src/background.js"
+        ],
+        "persistent": false
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "background"
+    ]
+}
