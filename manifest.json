@@ -17,13 +17,13 @@
         }
     ],
     "icons": {
-        "16": "dummy.jpg",
-        "48": "dummy.jpg",
-        "128": "dummy.jpg"
+        "16": "img/dummy.png",
+        "48": "img/dummy.png",
+        "128": "img/dummy.png"
     },
     "browser_action": {
         "default_icon": {
-            "19": "dummy.jpg"
+            "19": "img/dummy.png"
         },
         "default_title": "nopperi"
     },
