@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "NOPPERI",
-    "version": "0.0.4",
+    "version": "0.0.1",
     "description": "notion のページを一枚にまとめて出力します",
     "short_name": "NOPP",
     "content_scripts": [
@@ -12,8 +12,7 @@
             "js": [
                 "src/content.js"
             ],
-            "all_frames": true,
-            "run_at": "document_end"
+            "all_frames": true
         }
     ],
     "icons": {
@@ -30,12 +29,12 @@
     "background": {
         "scripts": [
             "src/background.js"
-        ],
-        "persistent": false
+        ]
     },
     "permissions": [
         "tabs",
         "activeTab",
-        "background"
+        "background",
+        "https://www.notion.so/*"
     ]
 }
