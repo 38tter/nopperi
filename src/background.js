@@ -4,19 +4,18 @@ chrome.browserAction.onClicked.addListener((tab) => {
     });
 });
 
+chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+});
+
 chrome.extension.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.message == "fetch") {
             const url = request.url;
-            (async () => {
-                await tabCreate(url);
-                chrome.tabs.getSelected(null, tab => {
-                    chrome.tabs.sendMessage(tab.id, "subTab", (res) => {
-                        sendResponse(res);
-                    });
-                });
-            })();
-            sendResponse('sendMessageFinished.')
+            chrome.tabs.create({ url: url });
+            sendResponse('sendMessageFinished.');
+        }
+        if (request.message == "subTab") {
+            sendResponse('subTab');
         }
         if (request.message == "remove") {
             chrome.tabs.getSelected(null, tab => {
