@@ -1,10 +1,36 @@
+var openedTabIds = [];
+var originalTabId;
+var addedHTML;
+var clickedFlg = false;
+
 chrome.browserAction.onClicked.addListener((tab) => {
+    clickedFlg = true;
     chrome.tabs.sendMessage(tab.id, "clicked", (res) => {
+        originalTabId = tab.id;
         console.log(res);
     });
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, t => {
+        if (changeInfo.status == "complete" && tab.index == 0 && clickedFlg) {
+            chrome.tabs.sendMessage(tab.id, "secondClicked", (res) => {
+                openedTabIds.push(tab.id);
+                addedHTML = res.message;
+                chrome.tabs.remove(tab.id);
+            });
+        }
+    });
+});
+
+
+chrome.tabs.onRemoved.addListener((tabId, removedInfo) => {
+    if (openedTabIds.includes(tabId)) {
+        chrome.tabs.sendMessage(originalTabId, { message: "addToOriginalPage", text: addedHTML }, (res) => {
+            console.log(res);
+        });
+        clickedFlg = false;
+    }
 });
 
 chrome.extension.onMessage.addListener(
@@ -15,7 +41,10 @@ chrome.extension.onMessage.addListener(
             sendResponse('sendMessageFinished.');
         }
         if (request.message == "subTab") {
-            sendResponse('subTab');
+            chrome.tabs.query({ active: true, currentWindow: true }, tab => {
+                chrome.tabs.move(tab[0].id, { index: 0 }, (tab) => { });
+            });
+            sendResponse('subTabDone');
         }
         if (request.message == "remove") {
             chrome.tabs.getSelected(null, tab => {
